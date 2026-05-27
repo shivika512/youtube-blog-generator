@@ -2,21 +2,11 @@ from flask import send_file
 from fpdf import FPDF
 from flask import Flask, render_template, request
 from youtube_transcript_api import YouTubeTranscriptApi
-import mysql.connector
 from summarizer import generate_summary
 
 app = Flask(__name__)
 latest_summary = ""
 
-# MySQL Connection
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Patanahi#4631",
-    database="yt_blog"
-)
-
-cursor = db.cursor()
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -57,25 +47,6 @@ def home():
 
             print("\nSUMMARY:\n")
             print(blog_summary)
-
-            # Save into MySQL
-            sql = """
-            INSERT INTO transcripts
-            (youtube_url, transcript, summary)
-            VALUES (%s, %s, %s)
-            """
-
-            values = (
-                youtube_url,
-                transcript_text,
-                blog_summary
-            )
-
-            cursor.execute(sql, values)
-
-            db.commit()
-
-            print("Saved to database!")
 
         except Exception as e:
 
