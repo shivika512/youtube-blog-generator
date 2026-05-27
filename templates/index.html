@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>YouTube Blog Generator</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>YouTube Blog Generator</h1>
+
+        <p class="subtitle">
+            Convert YouTube videos into AI-generated blog summaries
+        </p>
+
+        <form method="POST">
+
+            <input type="text"
+                   name="youtube_url"
+                   placeholder="Paste YouTube URL here..."
+                   required>
+
+           <button type="submit" onclick="showLoader()">
+    Generate Blog
+</button>
+
+        </form>
+
+        <div id="loader" class="loader-container">
+
+    <div class="spinner"></div>
+
+    <p>Generating Blog...</p>
+
+</div>
+
+        {% if transcript %}
+
+        {% if thumbnail %}
+
+<div class="card">
+
+    <h2>Video Thumbnail</h2>
+
+    <img src="{{ thumbnail }}" class="thumbnail">
+
+</div>
+
+{% endif %}
+
+        <div class="card">
+
+            <h2>Transcript</h2>
+
+            <p>{{ transcript }}</p>
+
+        </div>
+
+        {% endif %}
+
+        {% if summary %}
+
+        <div class="card">
+
+    <h2>Generated Blog Summary</h2>
+
+    <div class="button-group">
+
+        <button class="copy-btn"
+                onclick="copySummary()">
+
+            Copy Summary
+
+        </button>
+
+        <a href="/download">
+
+            <button class="pdf-btn">
+
+                Download PDF
+
+            </button>
+
+        </a>
+
+    </div>
+
+    <p id="summary-text">
+        {{ summary }}
+    </p>
+
+</div>
+
+        {% endif %}
+
+    </div>
+
+    <script>
+
+function showLoader() {
+
+    document.getElementById("loader").style.display = "block";
+
+}
+
+function copySummary() {
+
+    let summaryText =
+        document.getElementById("summary-text").innerText;
+
+    navigator.clipboard.writeText(summaryText);
+
+    alert("Summary copied!");
+
+}
+
+</script>
+
+</body>
+
+</html>
